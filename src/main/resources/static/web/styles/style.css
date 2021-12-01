@@ -1,0 +1,155 @@
+.body_background{
+    background-image: url("../assets/cool-background.png");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.body_height{
+    min-height: 100vh;
+}
+.align_self_end{
+    align-self: flex-end;
+}
+.align_self_start{
+    align-self: stretch !important;
+}
+.bg_color{
+    background-color: rgb(64, 90, 241);
+}
+.bg_color2{
+    background-color: rgb(122, 140, 241);
+}
+.bg_color3{
+    background-color: #000232 !important;
+}
+.text_white{
+    color: white !important;
+}
+.bank_logo{
+    font-size: 4rem;
+}
+i.px-2:hover{
+    color: black;
+}
+body{
+    font-family: 'Expert-Sans-Light', helvetica, arial, clean, sans-serif !important; 
+}
+input::placeholder{
+    color: rgba(255, 255, 255, 0.644) !important;
+}
+.no_style{
+    text-decoration: none !important;
+    appearance: none !important;
+}
+.display_none{
+    display: none;
+}
+.active_pointer{
+ cursor: pointer;
+}
+.front_position{
+    z-index: 23000;
+}
+.contact_account_type{
+    font-size: 13px !important;
+}
+.blueColor{
+    color: #210dc9;
+}
+.red_hover:hover{
+    color: red;
+    
+}
+/* CARD */
+.card_container{
+    width: 320px;
+    height: 188px;
+}
+.PLATINUM{
+    background: rgb(61,81,181);
+    background: linear-gradient(135deg, rgba(61,81,181,1) 15%, rgba(57,154,231,1) 53%, rgba(61,81,181,1) 100%);
+}
+.GOLD{
+    background: rgb(244,191,32);
+    background: linear-gradient(135deg, rgba(244,191,32,1) 15%, rgba(243,255,41,1) 53%, rgba(243,255,41,1) 100%);
+}
+.SILVER{
+    background: rgb(98,98,98);
+    background: linear-gradient(135deg, rgba(98,98,98,1) 0%, rgba(149,149,149,1) 53%, rgba(214,214,214,1) 100%);
+}
+.little_size{
+    font-size: 10px !important;
+}
+.card_numbers_size{
+    font-size: 24px;
+}
+.card_chip{
+    width: 45px;
+    height: 40px;
+}
+.visa_logo{
+    width: 90px;
+    height: 50px;
+}
+.no_card_border{
+    border: black 1px;
+    border-style: dashed !important;
+    border-radius: 25px;
+}
+/* Pop up toast*/
+.page_toast{
+    position: fixed;
+    z-index: 24000;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Load page */
+.loader-page {
+    position: fixed;
+    z-index: 25000;
+    background: rgb(255, 255, 255);
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:all .3s ease;
+}
+.loader-page::before {
+    content: "";
+    position: absolute;
+    border: 2px solid rgb(50, 150, 176);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border-left: 2px solid rgba(50, 150, 176,0);
+    border-top: 2px solid rgba(50, 150, 176,0);
+    animation: rotarload 1s linear infinite;
+    transform: rotate(0deg);
+}
+@keyframes rotarload {
+    0%   {transform: rotate(0deg)}
+    100% {transform: rotate(360deg)}
+}
+.loader-page::after {
+    content: "";
+    position: absolute;
+    border: 2px solid rgba(50, 150, 176,.5);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border-left: 2px solid rgba(50, 150, 176, 0);
+    border-top: 2px solid rgba(50, 150, 176, 0);
+    animation: rotarload 1s ease-out infinite;
+    transform: rotate(0deg);
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBB - Transfers</title>
+    <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+
+<body class="body_background">
+    <div class="loader-page"></div>
+    <div id="app" class="d-flex flex-column">
+        <!-- CONFIRMATION MESSAGES FOR TRANSACTION -->
+        <div v-if="transactionToast === true || contactToast === true || contactTypeToast === true" class="page_toast">
+            <section v-if="transactionToast === true" class="d-flex flex-column bg_color2 border border-dark rounded p-3">
+                <p class="col-12 text-center fs-5">Do you want to complete the transaction?</p>
+                <div class="d-flex justify-content-between col-12">
+                    <button @click="makeTransaction()" class="border-2 border-success rounded text-success fs-5 mx-2"><i class="bi bi-check"></i></button>
+                    <button @click="cancelTransaction()" class="border-2 border-danger rounded text-danger fs-5 mx-2"><i class="bi bi-x"></i></button>
+                </div>
+            </section>
+            <section v-if="contactToast === true" class="d-flex flex-column bg_color2 border border-dark rounded p-3">
+                <p class="col-12 text-center fs-5">Do you want to save the destination contact?</p>
+                <div class="d-flex justify-content-between col-12">
+                    <button @click="saveContact()" class="border-2 border-success rounded text-success fs-5 mx-2"><i class="bi bi-check"></i></button>
+                    <button @click="notSaveContact()" class="border-2 border-danger rounded text-danger fs-5 mx-2"><i class="bi bi-x"></i></button>
+                </div>
+            </section>
+            <section v-if="contactTypeToast === true" class="d-flex flex-column bg_color2 border border-dark rounded p-3">
+                <p class="col-12 text-center fs-5 mb-2">How do you want to save it?</p>
+                <div class="d-flex justify-content-around mb-3">
+                    <label for="family" class="active_pointer" :class="[contact === 'FAMILY' ? 'fw-bolder text-decoration-underline' : '']">Family</label>
+                    <input v-model="contact" type="radio" id="family" value="FAMILY" class="d-none">
+                    <label for="work" class="active_pointer" :class="[contact === 'WORK' ? 'fw-bolder text-decoration-underline' : '']">Work</label>
+                    <input v-model="contact" type="radio" id="work" value="WORK" class="d-none">
+                    <label for="friend" class="active_pointer" :class="[contact === 'FRIEND' ? 'fw-bolder text-decoration-underline' : '']">Friend</label>
+                    <input v-model="contact" type="radio" id="friend" value="FRIEND" class="d-none">
+                    <label for="other" class="active_pointer" :class="[contact === 'OTHER' ? 'fw-bolder text-decoration-underline' : '']">Other</label>
+                    <input v-model="contact" type="radio" id="other" value="OTHER" class="d-none">
+                </div>
+                <p v-if="message === 'You must choose one option to save the contact'" class="text-danger">{{message}}</p>
+                <div class="d-flex justify-content-between col-12">
+                    <button @click="saveContactType()" class="border-2 border-success rounded text-success fs-5 mx-2"><i class="bi bi-check"></i></button>
+                    <button @click="notSaveContactType()" class="border-2 border-danger rounded text-danger fs-5 mx-2"><i class="bi bi-x"></i></button>
+                </div>
+            </section>
+        </div>
+        <!-- -------------------------------------------------------------------------------- -->
+        
+        <header class="bg_color border-bottom border-dark" :class="[transactionToast === true || contactToast === true || contactTypeToast === true ? 'opacity-50' : 'sticky-top']">
+            <nav class="navbar navbar-expand-sm navbar-light p-0">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <div class="d-flex flex-row align-items-center text_white">
+                            <i class="bi bi-bank2 bank_logo"></i>
+                            <h1 class="mb-0 mt-2">MBB</h1>
+                        </div>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav fw-bolder">
+                            <a class="nav-link text-white" href="./accounts.html">My Accounts</a>
+                            <a class="nav-link text-white" href="./cards.html">Cards</a>
+                            <a class="nav-link text-white active" aria-current="page" href="./transfers.html">Transfers</a>
+                            <button @click="signOut()" class="border-0 bg_color text-white fw-bold text-start py-2 ps-0 ps-md-2">Sign
+                                Out</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="body_height d-flex flex-column align-items-center" :class="[transactionToast === true || contactToast === true || contactTypeToast === true ? 'opacity-50' : '']">
+            <!-- ERROR TOAST -->
+            <section v-if="messageToast === true" class="position-fixed end-0 col-8 col-md-4 mt-3 me-3 p-3 rounded front_position" :class="[message === 'Transaction was successful!' ? 'bg-success' : 'bg-danger']">
+                <div class="d-flex flex-row text-white justify-content-between">
+                    <p class="m-0">{{message}}</p>
+                    <button @click="closeMessageToast()" class="border-0 text-white" :class="[message === 'Transaction was successful!' ? 'bg-success' : 'bg-danger']">X</button>
+                </div>
+            </section>
+            <!-- --------------- -->
+            <h1 class="text-center mb-3 mt-4 mt-lg-5">Transfer</h1>
+            <form class="d-flex flex-wrap justify-content-center bg_color2 border border-dark rounded col-11 col-md-5 p-2">
+                <!-- ORIGIN ACCOUNT -->
+                <label for="origin_account" class="col-12 py-1 fw-bolder">Select your account:</label>
+                <select v-model="originAccount" name="origin_account" id="origin_account" class="col-12 mb-2 py-1">
+                    <option value="" disabled>Choose an account</option>
+                    <option v-for="account in accounts">{{account.number}}</option>
+                </select>
+                <!-- -------------- -->
+                <!-- DESTINATION ACCOUNT -->
+                <fieldset class="d-flex flex-wrap justify-content-center col-12">
+                    <legend class="fs-6 mb-0 fw-bolder col-12 pb-1">Destination account:</legend>
+                    <input v-model="destinationAccountType" type="radio" id="myAccounts" value="myAccounts" class="mt-1">
+                    <label for="myAccounts" class="me-5" :class="[destinationAccountType != ''  ? 'pb-1' : 'mb-2']">My Accounts</label>
+                    <input v-model="destinationAccountType" type="radio" id="otherAccount" value="otherAccount" class="mt-1">
+                    <label for="otherAccount" class="">Other Account</label>
+                </fieldset>
+                <fieldset v-if="destinationAccountType === 'otherAccount'" class="col-12 mb-2">
+                    <input v-model="destinationAccount" type="text" :class="[1 > accountContacts.length ? 'col-12' : 'col-10']">
+                    <button type="button" data-bs-toggle="collapse" data-bs-target="#contactAccountsButtons" aria-expanded="false" aria-controls="contactAccountsButtons" :class="[1 > accountContacts.length ? 'd-none' : 'col-2 bg-black text-white']">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <div class="collapse position-sticky top-0" id="contactAccountsButtons">
+                        <div class="card card-body p-0">
+                            <div class="d-flex justify-content-between align-items-center border border-dark px-2 py-1 m-1" v-for="contact in returnAccountContacts" >
+                                <div class="d-flex flex-wrap col-11">
+                                    <p class="m-0 col-9 text-start">{{contact.name}}</p>
+                                    <p class="m-0 col-3 text-center text-secondary contact_account_type">{{contact.contactType}}</p>
+                                    <p class="m-0">{{contact.accountNumber}}</p>
+                                </div>
+                                <input v-model="destinationAccount" type="radio" :value="[contact.accountNumber]" class="col-1">
+                            </div>
+                        </div>
+                      </div>
+                </fieldset>
+                <select v-if="destinationAccountType == 'myAccounts'" v-model="destinationAccount" name="ownAccounts" id="ownAccounts" class="col-12 py-1 mb-2">
+                    <option value="" disabled>Choose an account</option>
+                    <option v-for="account in accounts">{{account.number}}</option>
+                </select>
+                <!-- -------------------- -->
+                <!-- TRANSACTION AMOUNT -->
+                <div class="d-flex flex-wrap col-12">
+                    <label for="transactionAmount" class="col-3 fw-bolder">Amount</label>
+                    <p v-if="originAccount != ''" class="col-9 mb-0 text-end">Available money: ${{returnAmountMoney}}</p>
+                </div>
+                <input v-model="transactionAmount" type="number" min="0" id="transactionAmount" class="col-12 mb-2">
+                <!-- ------------------ -->
+                <!-- TRANSACTION DESCRIPTION -->
+                <label for="description" class="col-12 fw-bolder">Description</label>
+                <input v-model="transactionDescription" type="text" id="description" class="col-12">
+                <button @click.prevent="submitTransaction()" class="mt-3 text-white bg-black rounded">Transfer</button>
+                <!-- ----------------------- -->
+            </form>
+        </main>
+        <footer class="d-flex justify-content-between border-top border-dark pt-3 bg_color fw-bolder text_white" :class="[transactionToast === true || contactToast === true || contactTypeToast === true ? 'opacity-50' : '']">
+            <p class="ps-2">&copy; Mindhub Brothers Bank 2021</p>
+            <ul>
+                <a href="https://twitter.com/" class="text-white"><i class="bi bi-twitter px-2"></i></a>
+                <a href="https://www.youtube.com/" class="text-white"><i class="bi bi-youtube px-2"></i></a>
+                <a href="https://www.facebook.com/" class="text-white"><i class="bi bi-facebook px-2"></i></a>
+            </ul>
+        </footer>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
+        </script>
+    <script src="http://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="../scripts/transfers.js"></script>
+</body>
+
+</html>

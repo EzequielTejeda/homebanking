@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBB - Inicio</title>
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+
+<body class="body_background body_height">
+    <div class="loader-page"></div>
+    <div id="app">
+        <header class="mb-md-3">
+            <h1 v-if="signUp === false" class="text-center mt-3">MBB Login</h1>
+            <h1 v-else class="text-center mt-3">MBB Sign Up</h1>
+        </header>
+
+        <main class="d-flex justify-content-center">
+            <div v-if="signUp === false"
+                class="d-flex flex-wrap justify-content-center bg_color3 rounded text-white col-11 col-md-5 pb-3">
+                <i class="bi bi-bank2 bank_logo col-12 text-center  mt-3 mb-2"></i>
+                <h2 class="col-12 text-center">¡Welcome to MBB!</h2>
+                <p class="col-12 text-center">Sign in down below</p>
+                <form class="d-flex flex-wrap justify-content-center col-10">
+                    <input type="email" v-model="email" placeholder="Email"
+                        class="form-control rounded-0 shadow-none border-top-0 border-start-0 border-end-0 border-bottom-1 border-light text-white bg_color3 mb-2"
+                        required>
+                    <input type="password" v-model="password" placeholder="Password"
+                        class="form-control rounded-0 border-top-0 border-start-0 border-end-0 border-bottom-1 border-light shadow-none text-white bg_color3 mb-2"
+                        required>
+                    <a href="#" class="no_style text-white col-12 mb-2 text-end">Forgot Password</a>
+                    <button class="rounded border-0 col-12 p-2 mt-2" @click.prevent="verifyUser()">Log In</button>
+                </form>
+                <p class="col-12 text-center mt-3 mb-1">Don't have an account yet?</p>
+                <button @click="signUpTrue()" class="border-0 rounded mt-1">Sign Up</button>
+            </div>
+            <div v-else
+                class="d-flex flex-wrap justify-content-center bg_color3 rounded text-white col-11 col-md-5 pb-3">
+                <button @click="signUpFalse()"
+                    class="col-12 text-end text-white rounded border-0 bg_color3 pt-1 pe-3 fs-4">X</button>
+                <i
+                    class="bi bi-bank2 bank_logo col-12 text-center mb-2"></i>
+                <h2 class="col-12 text-center">¡Welcome to MBB!</h2>
+                <p class="col-12 text-center">Fill the form to sign up</p>
+                <form class="d-flex flex-wrap justify-content-center col-10">
+                    <input type="text" v-model="firstName" placeholder="First Name"
+                        class="form-control rounded-0 shadow-none border-top-0 border-start-0 border-end-0 border-bottom-1 border-light text-white bg_color3 mb-2"
+                        required>
+                    <input type="text" v-model="lastName" placeholder="Last Name"
+                        class="form-control rounded-0 border-top-0 border-start-0 border-end-0 border-bottom-1 border-light shadow-none text-white bg_color3 mb-2"
+                        required>
+                    <input type="email" v-model="email" placeholder="Email"
+                        class="form-control rounded-0 shadow-none border-top-0 border-start-0 border-end-0 border-bottom-1 border-light text-white bg_color3 mb-2"
+                        required>
+                    <input type="password" v-model="password" placeholder="Password"
+                        class="form-control rounded-0 border-top-0 border-start-0 border-end-0 border-bottom-1 border-light shadow-none text-white bg_color3 mb-2"
+                        required>
+                    <button class="rounded border-0 col-12 p-2 mt-4 mb-2" @click.prevent="createUser()">Sign Up</button>
+                </form>
+            </div>
+            <section v-if="loginError === true" class="position-fixed top-0 end-0 col-6 col-md-4 bg-danger mt-3 me-3 p-3 rounded">
+                <div class="d-flex flex-row text-white justify-content-between">
+                    <p class="m-0">{{message}}</p>
+                    <button @click="closeLoginToast()" class="border-0 bg-danger text-white">X</button>
+                </div>
+            </section>
+            <section v-if="signUpError === true" class="position-fixed top-0 end-0 col-6 col-md-4 bg-danger mt-3 me-3 p-3 rounded">
+                <div class="d-flex flex-row text-white justify-content-between">
+                    <p class="m-0">{{message}}</p>
+                    <button @click="closeSignUpToast()" class="border-0 bg-danger text-white">X</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
+        </script>
+    <script src="http://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="./scripts/index.js"></script>
+</body>
+
+</html>

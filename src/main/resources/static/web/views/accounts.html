@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBB - Personal Accounts</title>
+  <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+
+<body class="d-flex flex-column body_background">
+  <div class="loader-page"></div>
+  <div id="app">
+    <!-- OPTION TOAST -->
+    <div v-if="deleteAccount === true || accountTypeConfirmation === true" class="page_toast">
+      <section v-if="deleteAccount === true" class="d-flex flex-column bg_color2 border border-dark rounded p-3">
+          <p>Do you want to delete this account ({{deleted_account}})?</p>
+          <div class="d-flex justify-content-between col-12">
+              <button @click="deleteAccountConfirmation()" class="border-2 border-success rounded text-success fs-5 mx-2"><i class="bi bi-check"></i></button>
+              <button @click="cancelAccountDelete()" class="border-2 border-danger rounded text-danger fs-5 mx-2"><i class="bi bi-x"></i></button>
+          </div>
+      </section>
+      <section v-if="accountTypeConfirmation === true" class="d-flex flex-column bg_color2 border border-dark rounded p-3">
+        <p>What account type do you wish?</p>
+        <div class="d-flex justify-content-around mb-3">
+          <label for="savings" class="active_pointer" :class="[chosenAccountType === 'SAVINGS' ? 'fw-bolder text-decoration-underline' : '']">Savings</label>
+          <input v-model="chosenAccountType" type="radio" id="savings" value="SAVINGS" class="d-none">
+          <label for="current" class="active_pointer" :class="[chosenAccountType === 'CURRENT' ? 'fw-bolder text-decoration-underline' : '']">Current</label>
+          <input v-model="chosenAccountType" type="radio" id="current" value="CURRENT" class="d-none">
+        </div>
+        <div class="d-flex justify-content-between col-12">
+            <button @click="createAccount()" class="border-2 border-success rounded text-success fs-5 mx-2"><i class="bi bi-check"></i></button>
+            <button @click="cancelAccountCreation()" class="border-2 border-danger rounded text-danger fs-5 mx-2"><i class="bi bi-x"></i></button>
+        </div>
+    </section>
+    </div>
+    <!-- -------------- -->
+    <header class="bg_color border-bottom border-dark" :class="[deleteAccount === true || accountTypeConfirmation === true ? 'opacity-50' : 'sticky-top']">
+      <nav class="navbar navbar-expand-sm navbar-light p-0">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <div class="d-flex flex-row align-items-center text_white">
+              <i class="bi bi-bank2 bank_logo"></i>
+              <h1 class="mb-0 mt-2">MBB</h1>
+            </div>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav fw-bolder">
+              <a class="nav-link active text-decoration-underline" aria-current="page" href="./accounts.html">My Accounts</a>
+              <a class="nav-link text-white" href="./cards.html">Cards</a>
+              <a class="nav-link text-white" href="./transfers.html">Transfers</a>
+              <button @click="signOut()" class="border-0 bg_color text-white fw-bold text-start py-2 ps-0 ps-md-2">Sign Out</button>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="d-flex flex-column body_background body_height justify-content-between">
+
+    <main class="d-flex flex-wrap justify-content-center mx-2 my-3" :class="[deleteAccount === true || accountTypeConfirmation === true ? 'opacity-50' : '']">
+      <!-- MESSAGE TOAST -->
+      <section v-if="messageToast === true" class="position-fixed end-0 col-8 col-md-4 mt-3 me-3 p-3 rounded front_position" :class="[message === 'Make sure to transfer the balance to another account before delete it' ? 'bg-danger' : 'bg-success']">
+        <div class="d-flex flex-row text-white justify-content-between">
+            <p class="m-0">{{message}}</p>
+            <button @click="closeMessageToast()" class="border-0 text-white" :class="[message === 'Make sure to transfer the balance to another account before delete it' ? 'bg-danger' : 'bg-success']">X</button>
+        </div>
+    </section>
+      <!-- ACCOUNTS ----------------------------->
+      <div class="d-flex flex-row justify-content-between col-11 col-md-8 my-md-3 col-lg-11">
+        <h2>Personal Accounts</h2>
+        <div class="d-flex flex-column">
+          <p class="text-end align-self-end fw-bold" :class="[3 > accounts_data.length ? 'mb-2' : 'mt-2 mb-0']">¡Welcome {{client_data.firstName}}
+          {{client_data.lastName}}!</p>
+          <button v-if="3 > accounts_data.length" @click="getAccountType()" class="bg-dark text-white px-0 rounded">New Account</button>
+        </div>
+      </div>
+      <div class="d-flex flex-row flex-wrap justify-content-around">
+        <section v-for="account in accounts_data"
+          class="bg_color2 rounded border border-dark d-flex flex-row flex-wrap col-11 col-md-8 col-lg-5 p-2 pt-0 mb-lg-4 justify-content-around my-2">
+          <div class="d-flex justify-content-end col-12">
+            <label :for="account.number" class="border-0 fs-4 red_hover active_pointer">X</label>
+            <input type="radio" :id="account.number" :value="account.number" v-model="deleted_account" class="d-none">
+          </div>
+          <div class="col-5 text-center">
+            <h3 class="fs-5">Account Number</h3>
+            <p>{{account.number}}</p>
+          </div>
+          <div class="col-5 text-center">
+            <h3 class="fs-5">Account Type</h3>
+            <p>{{account.accountType}}</p>
+          </div>
+          <div class="col-5 text-center">
+            <h3 class="fs-5">From Date</h3>
+            <p>{{account.creationDate}}</p>
+          </div>
+          <div class="col-5 text-center">
+            <h3 class="fs-5">Balance</h3>
+            <p>${{(account.balance).toFixed(2)}}</p>
+          </div>
+          <button class="rounded bg-dark col-4 col-lg-3 mb-1"><a class="text-decoration-none text-white"
+              :href="'/web/views/account.html?id=' + account.id">Record</a></button>
+        </section>
+        <!-- ------------------------------------------------ -->
+        <!-- LOANS ----------------------------------------->
+          <div class="d-flex justify-content-between col-11 col-md-8 col-lg-11 mt-3 mb-2">
+            <h2 class="m-0">Loans requested</h2>
+            <button v-if="3 > loans.length" @click="loanApply()" class="bg-dark text-white rounded col-3 col-md-2 col-lg-1 p-0">Apply</button>
+        </div>
+        <section v-if="loans.length > 0" v-for="loan in client_data.loans"
+          class="bg_color2 rounded border border-dark d-flex flex-row flex-wrap col-11 col-md-8 col-lg-5 p-2 justify-content-around my-2">
+          <div class="col-4 text-center d-flex flex-column justify-content-around">
+            <h3 class="fs-5 mt-1">Loan</h3>
+            <p>{{loan.name}}</p>
+          </div>
+          <div class="col-4 text-center d-flex flex-column justify-content-around">
+            <h3 class="fs-5 mt-1">Amount</h3>
+            <p>${{(loan.amount).toFixed(2)}}</p>
+          </div>
+          <div class="col-4 text-center d-flex flex-column justify-content-around">
+            <h3 class="fs-5 mt-1">Payments</h3>
+            <p>{{loan.payments}}</p>
+          </div>
+        </section>
+        <p v-else
+          class="fw-bold text-center text-white rounded bg-danger py-2 mt-3 mb-md-5 mt-lg-4 col-11 col-md-8 col-lg-11">
+          You do not have any loans.
+        </p>
+        <!-- -------------------------------------- -->
+      </div>
+    </main>
+
+    <footer class="d-flex justify-content-between border-top border-dark pt-3 bg_color fw-bolder text_white" :class="[deleteAccount === true || accountTypeConfirmation === true ? 'opacity-50' : '']">
+      <p class="ps-2">&copy; Mindhub Brothers Bank 2021</p>
+      <ul>
+        <a href="https://twitter.com/" class="text-white"><i class="bi bi-twitter px-2"></i></a>
+        <a href="https://www.youtube.com/" class="text-white"><i class="bi bi-youtube px-2"></i></a>
+        <a href="https://www.facebook.com/" class="text-white"><i class="bi bi-facebook px-2"></i></a>
+      </ul>
+    </footer>
+
+  </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
+    </script>
+  <script src="http://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="../scripts/accounts.js"></script>
+</body>
+
+</html>
