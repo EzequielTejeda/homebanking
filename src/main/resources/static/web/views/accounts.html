@@ -70,10 +70,10 @@
 
     <main class="d-flex flex-wrap justify-content-center mx-2 my-3" :class="[deleteAccount === true || accountTypeConfirmation === true ? 'opacity-50' : '']">
       <!-- MESSAGE TOAST -->
-      <section v-if="messageToast === true" class="position-fixed end-0 col-8 col-md-4 mt-3 me-3 p-3 rounded front_position" :class="[message === 'Make sure to transfer the balance to another account before delete it' ? 'bg-danger' : 'bg-success']">
+      <section v-if="messageToast === true" class="position-fixed end-0 col-8 col-md-4 mt-3 me-3 p-3 rounded front_position" :class="[deleteAccount === false ? 'bg-danger' : 'bg-success']">
         <div class="d-flex flex-row text-white justify-content-between">
             <p class="m-0">{{message}}</p>
-            <button @click="closeMessageToast()" class="border-0 text-white" :class="[message === 'Make sure to transfer the balance to another account before delete it' ? 'bg-danger' : 'bg-success']">X</button>
+            <button @click="closeMessageToast()" class="border-0 text-white" :class="[deleteAccount === false ? 'bg-danger' : 'bg-success']">X</button>
         </div>
     </section>
       <!-- ACCOUNTS ----------------------------->

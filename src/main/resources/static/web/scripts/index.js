@@ -18,7 +18,8 @@ const app = Vue.createApp({
             accountsLength: 0,
             message: "",
             loginError: false,
-            signUpError: false
+            signUpError: false,
+            accountType: "CURRENT"
         }
     },
     created(){
@@ -40,7 +41,7 @@ const app = Vue.createApp({
             {headers:{'content-type':'application/x-www-form-urlencoded'}})
             .then(response => axios.post('/api/login',`email=${this.email}&password=${this.password}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}}))
-            .then(response => axios.post('/api/clients/current/accounts', `email=${this.email}&accountsLenght=${this.accountsLength}`,
+            .then(response => axios.post('/api/clients/current/accounts', `accountType=${this.accountType}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}}))
             .then(response =>  window.location.href = "http://localhost:8080/web/views/accounts.html")
             .catch(error =>{

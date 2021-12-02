@@ -75,6 +75,9 @@ public class AccountController {
         if(accountService.getByNumber(accountNumber).getClient() != clientService.getByEmail(authentication.getName())){
             return new ResponseEntity<>("Account is not client's property", HttpStatus.FORBIDDEN);
         }
+        if(clientService.getByEmail(authentication.getName()).getAccounts().size() < 2){
+            return new ResponseEntity<>("Client should have at least one account", HttpStatus.FORBIDDEN);
+        }
         if(accountService.getByNumber(accountNumber).getBalance() != 0){
             return new ResponseEntity<>("Make sure to transfer the balance to another account before delete it", HttpStatus.FORBIDDEN);
         }

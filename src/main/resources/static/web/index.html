@@ -17,12 +17,14 @@
 <body class="body_background body_height">
     <div class="loader-page"></div>
     <div id="app">
+
         <header class="mb-md-3">
             <h1 v-if="signUp === false" class="text-center mt-3">MBB Login</h1>
             <h1 v-else class="text-center mt-3">MBB Sign Up</h1>
         </header>
 
         <main class="d-flex justify-content-center">
+            <!-- LOG IN -->
             <div v-if="signUp === false"
                 class="d-flex flex-wrap justify-content-center bg_color3 rounded text-white col-11 col-md-5 pb-3">
                 <i class="bi bi-bank2 bank_logo col-12 text-center  mt-3 mb-2"></i>
@@ -41,6 +43,8 @@
                 <p class="col-12 text-center mt-3 mb-1">Don't have an account yet?</p>
                 <button @click="signUpTrue()" class="border-0 rounded mt-1">Sign Up</button>
             </div>
+            <!-- ----------------------------------------------- -->
+            <!-- SIGN UP -->
             <div v-else
                 class="d-flex flex-wrap justify-content-center bg_color3 rounded text-white col-11 col-md-5 pb-3">
                 <button @click="signUpFalse()"
@@ -65,6 +69,8 @@
                     <button class="rounded border-0 col-12 p-2 mt-4 mb-2" @click.prevent="createUser()">Sign Up</button>
                 </form>
             </div>
+            <!-- -------------------- -->
+            <!-- MESSAGES -->
             <section v-if="loginError === true" class="position-fixed top-0 end-0 col-6 col-md-4 bg-danger mt-3 me-3 p-3 rounded">
                 <div class="d-flex flex-row text-white justify-content-between">
                     <p class="m-0">{{message}}</p>
@@ -77,6 +83,7 @@
                     <button @click="closeSignUpToast()" class="border-0 bg-danger text-white">X</button>
                 </div>
             </section>
+            <!-- ------------------------------ -->
         </main>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

@@ -96,6 +96,12 @@ const app = Vue.createApp({
                     setTimeout(this.closeMessageToast, 3000)
                     setTimeout(this.cancelAccountDelete, 3000)
                     return false
+                }else if(this.accounts_data.length < 2){
+                    this.message = "Client should have at least one account"
+                    this.messageToast = true
+                    setTimeout(this.closeMessageToast, 3000)
+                    setTimeout(this.cancelAccountDelete, 3000)
+                    return false
                 }else{
                     return true
                 }
