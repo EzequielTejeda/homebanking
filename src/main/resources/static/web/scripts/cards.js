@@ -18,7 +18,7 @@ const app = Vue.createApp({
         }
     },
     created(){
-        axios.get("http://localhost:8080/api/clients/current")
+        axios.get("https://localhost:8080/api/clients/current")
         .then(response => {
             this.client_cards = response.data.cards
             this.client_cards.sort((a,b)=>{
@@ -47,7 +47,7 @@ const app = Vue.createApp({
             }
         },
         deleteCardConfirmation(){
-            axios.patch('/api/clients/current/cards/delete',`cardNumber=${this.deleted_card}`,
+            axios.patch('https://localhost:8080/api/clients/current/cards/delete',`cardNumber=${this.deleted_card}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}})
             .then(response => {
                 this.deleted_card = ""
@@ -65,14 +65,14 @@ const app = Vue.createApp({
             this.deleted_card = ""
         },
         signOut(){
-            axios.post('/api/logout')
+            axios.post('https://localhost:8080/api/logout')
             .then(response => window.location.href = "http://localhost:8080/web/index.html")
             .catch(error =>{
                 console.log(error)
             })
         },
         changeCardPage(){
-            window.location.href = "http://localhost:8080/web/views/create-cards.html"
+            window.location.href = "https://localhost:8080/web/views/create-cards.html"
         },
         verifyExpiration(){
             this.expirationDate = moment().format('MM/YY')

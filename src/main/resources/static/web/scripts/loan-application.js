@@ -21,14 +21,14 @@ const app = Vue.createApp({
         }
     },
     created(){
-        axios.get("http://localhost:8080/api/loans")
+        axios.get("https://localhost:8080/api/loans")
         .then(response => {
             this.loans = response.data
         })
         .catch(error => {
             console.log(error)
         })
-        axios.get("http://localhost:8080/api/clients/current")
+        axios.get("https://localhost:8080/api/clients/current")
         .then(response => {
             let filtredAccounts = response.data.accounts.filter(account => account.deleted === false)
             this.lookForAccountNumbers(filtredAccounts)
@@ -40,8 +40,8 @@ const app = Vue.createApp({
     },
     methods: {
         signOut(){
-            axios.post('/api/logout')
-            .then(response => window.location.href = "http://localhost:8080/web/index.html")
+            axios.post('https://localhost:8080/api/logout')
+            .then(response => window.location.href = "https://localhost:8080/web/index.html")
             .catch(error =>{
                 console.log(error)
             })
@@ -94,7 +94,7 @@ const app = Vue.createApp({
             this.loanToast = false
         },
         requestLoan(){
-            axios.post('/api/clients/current/loans',{ id: `${this.findLoanId}`, amount: `${this.loanAmount}`, payments: `${this.payments}`, destinationAccount: `${this.destinationAccount}`})
+            axios.post('https://localhost:8080/api/clients/current/loans',{ id: `${this.findLoanId}`, amount: `${this.loanAmount}`, payments: `${this.payments}`, destinationAccount: `${this.destinationAccount}`})
             .then(response => {
                 this.loanToast = false
                 this.message = response.data

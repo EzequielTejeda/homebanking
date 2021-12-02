@@ -24,7 +24,7 @@ const app = Vue.createApp({
         }
     },
     created(){
-        axios.get("http://localhost:8080/api/clients/current")
+        axios.get("https://localhost:8080/api/clients/current")
         .then(response => {
             this.accounts = response.data.accounts.filter(account => account.deleted === false)
             this.accounts.sort((a,b)=>{
@@ -91,7 +91,7 @@ const app = Vue.createApp({
             }
         },
         makeTransaction(){
-            axios.post('/api/clients/current/transactions',`amount=${this.transactionAmount}&description=${this.transactionDescription}&originAccount=${this.originAccount}&destinationAccount=${this.destinationAccount}&saveContact=${this.contact}`,
+            axios.post('https://localhost:8080/api/clients/current/transactions',`amount=${this.transactionAmount}&description=${this.transactionDescription}&originAccount=${this.originAccount}&destinationAccount=${this.destinationAccount}&saveContact=${this.contact}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}})
             .then(response =>{
                 this.transactionToast = false
@@ -144,8 +144,8 @@ const app = Vue.createApp({
             this.messageToast = false
         },
         signOut(){
-            axios.post('/api/logout')
-            .then(response => window.location.href = "http://localhost:8080/web/index.html")
+            axios.post('https://localhost:8080/api/logout')
+            .then(response => window.location.href = "https://localhost:8080/web/index.html")
             .catch(error =>{
                 console.log(error)
             })
