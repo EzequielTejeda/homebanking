@@ -20,7 +20,7 @@ const app = Vue.createApp({
         }
     },
     created(){
-        axios.get("https://localhost:8080/api/clients/current")
+        axios.get("http://localhost:8080/api/clients/current")
         .then(response => {
             this.client_data = response.data
             this.loans = this.client_data.loans
@@ -44,7 +44,7 @@ const app = Vue.createApp({
     methods: {
         signOut(){
             axios.post('/api/logout')
-            .then(response => window.location.href = "https://localhost:8080/web/index.html")
+            .then(response => window.location.href = "http://localhost:8080/web/index.html")
             .catch(error =>{
                 console.log(error)
             })
@@ -54,7 +54,7 @@ const app = Vue.createApp({
             this.accountTypeConfirmation = true
         },
         createAccount(){
-            axios.post('https://localhost:8080/api/clients/current/accounts', `accountType=${this.chosenAccountType}`,
+            axios.post('http://localhost:8080/api/clients/current/accounts', `accountType=${this.chosenAccountType}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}})
             .then(response => location.reload())
         },
@@ -62,7 +62,7 @@ const app = Vue.createApp({
             this.accountTypeConfirmation = false
         },
         deleteAccountConfirmation(){
-            axios.patch('https://localhost:8080/api/clients/current/accounts/delete',`accountNumber=${this.deleted_account}`,
+            axios.patch('http://localhost:8080/api/clients/current/accounts/delete',`accountNumber=${this.deleted_account}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}})
             .then(response => {
                 this.deleted_account = ""
@@ -83,7 +83,7 @@ const app = Vue.createApp({
             this.messageToast = false
         },
         loanApply(){
-            window.location.href = "https://localhost:8080/web/views/loan-application.html"
+            window.location.href = "http://localhost:8080/web/views/loan-application.html"
         }
     },
     computed:{

@@ -27,9 +27,9 @@ const app = Vue.createApp({
     },
     methods: {
         verifyUser(){
-            axios.post('https://localhost:8080/api/login',`email=${this.email}&password=${this.password}`,
+            axios.post('http://localhost:8080/api/login',`email=${this.email}&password=${this.password}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}})
-            .then(response => window.location.href = "https://localhost:8080/web/views/accounts.html")
+            .then(response => window.location.href = "http://localhost:8080/web/views/accounts.html")
             .catch(error =>{
                 this.message = "Invalid email or password"
                 this.loginError = true
@@ -37,13 +37,13 @@ const app = Vue.createApp({
             })
         },
         createUser(){
-            axios.post('https://localhost:8080/api/clients',`firstName=${this.firstName}&lastName=${this.lastName}&email=${this.email}&password=${this.password}`,
+            axios.post('http://localhost:8080/api/clients',`firstName=${this.firstName}&lastName=${this.lastName}&email=${this.email}&password=${this.password}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}})
-            .then(response => axios.post('https://localhost:8080/api/login',`email=${this.email}&password=${this.password}`,
+            .then(response => axios.post('http://localhost:8080/api/login',`email=${this.email}&password=${this.password}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}}))
-            .then(response => axios.post('https://localhost:8080/api/clients/current/accounts', `accountType=${this.accountType}`,
+            .then(response => axios.post('http://localhost:8080/api/clients/current/accounts', `accountType=${this.accountType}`,
             {headers:{'content-type':'application/x-www-form-urlencoded'}}))
-            .then(response =>  window.location.href = "https://localhost:8080/web/views/accounts.html")
+            .then(response =>  window.location.href = "http://localhost:8080/web/views/accounts.html")
             .catch(error =>{
                 console.log(error)
                 if(this.firstName === "" || this.lastName === "" || this.email === "" || this.password === ""){

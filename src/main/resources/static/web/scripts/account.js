@@ -19,7 +19,7 @@ const app = Vue.createApp({
         }
     },
     created() {
-        axios.get("https://localhost:8080/api/clients/current/account/transaction")
+        axios.get("http://localhost:8080/api/clients/current/account/transaction")
         .then(response => {
             this.currentClientAccounts = response.data
             this.lookForAccountTransactions()
@@ -28,7 +28,7 @@ const app = Vue.createApp({
         .catch(error => {
             console.log(error)
         })
-        axios.get("https://localhost:8080/api/clients/current")
+        axios.get("http://localhost:8080/api/clients/current")
         .then(response => {
             this.currentClientLoans = response.data.loans
         })
@@ -39,7 +39,7 @@ const app = Vue.createApp({
     methods: {
         signOut() {
             axios.post('/api/logout')
-            .then(response => window.location.href = "https://localhost:8080/web/index.html")
+            .then(response => window.location.href = "http://localhost:8080/web/index.html")
             .catch(error => {
                 console.log(error)
             })
@@ -58,7 +58,7 @@ const app = Vue.createApp({
                     }
                 }
             }else{
-                window.location.href = "https://localhost:8080/web/views/accounts.html"
+                window.location.href = "http://localhost:8080/web/views/accounts.html"
             }
         },
         getAccountBalance(){
